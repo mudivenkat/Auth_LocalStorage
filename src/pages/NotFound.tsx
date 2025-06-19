@@ -1,0 +1,15 @@
+
+
+const NotFound = ()=>{
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-100" >
+      <div className="text-center">
+        <h1 className="font-bold text-4xl ">404</h1>
+        <p className="text-gray-600 text-xl mb-4">Oops! Page Not Found</p>
+        <a href="/" className="text-blue-500 hover:text-blue-700 underline">Return to Home</a>
+      </div>
+    </div>
+  )
+}
+export default NotFound
