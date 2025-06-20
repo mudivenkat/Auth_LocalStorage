@@ -18,7 +18,30 @@ const AuthContainer =()=>{
   const[currentStep,setCurrentStep] =useState<AuthStep>('login');
   const[currentUser,setCurrentUser] =useState<User|null>(null);
 
-  interface User{
+  const handleRegister=(userData:User)=>{
+    setCurrentUser(userData);
+    setCurrentStep("success")
+
+  }
+  const handleBackLogin=()=>{
+    setCurrentStep("login");
+    setCurrentUser(null)
+  }
+  const handleSignUp=()=>{
+    setCurrentStep("register")
+  }
+  const handleSignUser=(mobileNumber:string) =>{
+
+    const  users = JSON.parse(localStorage.getItem("users")||"[]");
+    const user = users.find((u:User)=>u.mobileNumber===mobileNumber)
+
+    if(user){
+      setCurrentUser(user);
+      setCurrentStep("success")
+    }
+    else{
+      setCurrentStep("register")
+    }
 
   }
   return (
@@ -26,19 +49,33 @@ const AuthContainer =()=>{
       <div className="w-full max-w-md">
         {currentStep==="login" &&
         (
-          <LoginScreen/>
+          <LoginScreen 
+          onSignUp={handleSignUp}
+          onSignIn={handleSignUser}
+          />
         )
-        }
+        } 
         {
-          true && (
-            <RegistrationForm/>
+          currentStep==="register" && (
+            <RegistrationForm 
+            onSuccess= {handleRegister}
+            onBack={handleBackLogin}
+            
+            
+            />
           )
         }
-        {
-          currentStep==="success" &&(
-            <SuccessScreen/>
+         {
+          currentStep==="success"&&(
+            <SuccessScreen 
+            userData={currentUser}
+
+            onBack={handleBackLogin}
+            
+            
+            />
           )
-        }
+        } 
 
       </div>
 

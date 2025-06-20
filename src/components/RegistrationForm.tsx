@@ -8,7 +8,14 @@ interface User{
   mobileNumber:string,
   email:string
 }
-const  RegistrationForm=()=> {
+
+interface RegistrationProps{
+ onSuccess:(userData:User)=>void,
+ onBack:()=>void
+}
+
+
+const  RegistrationForm=({onSuccess,onBack}:RegistrationProps)=> {
   const[formData,setFormData]=useState<User>({
     name:"",
     mobileNumber:"",
@@ -18,9 +25,32 @@ const  RegistrationForm=()=> {
 const[isLoading,setIsLoading] =useState(false);
 
   const handleInputChange=(field:string,value:string)=>{
-
+     setFormData((prev)=>({...prev,[field]:value}));
   }
-  const handleSave=()=>{
+  const handleSave= async ()=>{
+    setIsLoading(true);
+    try{
+       await new Promise(resolve=>{
+         return  setTimeout(resolve,1000)
+       });
+       const users = JSON.parse(localStorage.getItem('users')||"[]");
+      //  const data= JSON.parse(sessionStorage.getItem("users")||"[]")
+       const newUser={...formData};
+       users.push(newUser);
+       localStorage.setItem("users",JSON.stringify(users));
+      //  sessionStorage.setItem("users",JSON.stringify(users))
+       console.log("SuccessFully User saved in LocalStorageSystem");
+         onSuccess(newUser)
+        //  console.log(data,"session storage")
+    }
+    catch(err){
+      console.log(err)
+
+    }
+    finally{
+      setIsLoading(false)
+    }
+    // onSuccess(formData)
 
   }
   return (
@@ -49,16 +79,16 @@ const[isLoading,setIsLoading] =useState(false);
        <p className="text-sm text-red-500">Error</p>
       </div>
       <div className="space-y-2">
-        <label htmlFor="mobile" className="flex items-center text-sm font-medium text-gray-700">
+      <label htmlFor="mobile" className="flex items-center text-sm font-medium text-gray-700">
       <Phone className="w-4 h-4 mr-2 text-gray-500"/>
        Mobile Number
         </label>
         <Input
-        id="mobile"
+        id="mobileNumber"
         placeholder="Enter your number"
         type="tel"
         value={formData.mobileNumber}
-        onChange={(e)=>handleInputChange("mobile",e.target.value)}
+        onChange={(e)=>handleInputChange("mobileNumber",e.target.value)}
         className={`h-12 text-lg border-2 transition-colors ${
           false ? 'border-red-300 focus:border-red-500' : 'border-gray-200 focus:border-purple-500'
         }`}
@@ -86,10 +116,11 @@ const[isLoading,setIsLoading] =useState(false);
 
     {/* Button Added  */}
      <div className="space-y-3 pt-4">
-    <Button
+    <Button 
+    onClick={handleSave}
     className="w-full h-12 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-semibold rounded-lg shadow-lg transition-all duration-200 transform hover:scale-105 "
     >
-   {false ? (
+   {isLoading ? (
             <div className="flex items-center space-x-2">
               <div className="w-4 h-4 border-2 rounded-full border-t-transparent animate-spin border-white"></div>
               <span>Creating Account ....</span>
@@ -102,6 +133,7 @@ const[isLoading,setIsLoading] =useState(false);
             )}
       </Button>
     <Button
+    onClick={onBack}
     variant="outline"
     className="w-full h-12 border-2 border-gray-200 text-gray-600 hover:bg-gray-50  hover:border-gray-300  font-semibold rounded-lg transition-all duration-200"
     >
