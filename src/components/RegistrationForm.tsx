@@ -27,7 +27,25 @@ const[isLoading,setIsLoading] =useState(false);
   const handleInputChange=(field:string,value:string)=>{
      setFormData((prev)=>({...prev,[field]:value}));
   }
+
+
+  const validateError=()=>{
+  const newErrors: Record<string,string> ={};
+   if(!formData.name.trim()){
+    newErrors.name="Name is Required"
+   }
+   if(!formData.mobileNumber.trim()){
+    newErrors.mobileNumber="mobile is Required"
+   }
+   if(!formData.email.trim()){
+    newErrors.email="email is Required"
+   }
+   setErrors(newErrors);
+    return Object.keys(newErrors).length===0
+
+  }
   const handleSave= async ()=>{
+    if(!validateError()) return;
     setIsLoading(true);
     try{
        await new Promise(resolve=>{
@@ -76,8 +94,8 @@ const[isLoading,setIsLoading] =useState(false);
       onChange={(e)=>handleInputChange('name',e.target.value)}
       className={`h-12 text-lg border-2 transition-colors ${false?'border-red-300 focus:border-red-500':'border-gray-200 focus:border-purple-500'}`}  
         />
-       <p className="text-sm text-red-500">Error</p>
-      </div>
+{ errors.name &&      <p className="text-sm text-red-500">{errors.name}</p>
+}      </div>
       <div className="space-y-2">
       <label htmlFor="mobile" className="flex items-center text-sm font-medium text-gray-700">
       <Phone className="w-4 h-4 mr-2 text-gray-500"/>
@@ -94,7 +112,7 @@ const[isLoading,setIsLoading] =useState(false);
         }`}
         maxLength={10}
         />
-         {true && <p className="text-red-500 text-sm">mobileError</p>}
+         {errors.mobileNumber && <p className="text-red-500 text-sm">{errors.mobileNumber}</p>}
       </div>
       <div className="space-y-2">
        <label htmlFor="email" className="flex items-center text-sm font-medium text-gray-700">
@@ -110,7 +128,7 @@ const[isLoading,setIsLoading] =useState(false);
        false ? 'border-red-300 focus:border-red-500' : 'border-gray-200 focus:border-purple-500'
       }`}       
        />
-       {true && <p className="text-red-500 text-sm">email error</p>}
+       {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
       </div>
      </div>
 
