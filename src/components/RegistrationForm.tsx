@@ -26,7 +26,10 @@ const[isLoading,setIsLoading] =useState(false);
 
   const handleInputChange=(field:string,value:string)=>{
      setFormData((prev)=>({...prev,[field]:value}));
-  }
+     if (errors[field]) {
+      setErrors(prev => ({ ...prev, [field]: '' }));
+    } 
+   }
 
 
   const validateError=()=>{
@@ -37,9 +40,12 @@ const[isLoading,setIsLoading] =useState(false);
    if(!formData.mobileNumber.trim()){
     newErrors.mobileNumber="mobile is Required"
    }
-   if(!formData.email.trim()){
-    newErrors.email="email is Required"
-   }
+   
+   if (!formData.email.trim()) {
+    newErrors.email = 'Email is required';
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+    newErrors.email = 'Please enter a valid email address';
+  }
    setErrors(newErrors);
     return Object.keys(newErrors).length===0
 
@@ -72,6 +78,7 @@ const[isLoading,setIsLoading] =useState(false);
 
   }
   return (
+    <div className="max-w-md m-8">
     <div className="w-full border-0 shadow-2xl bg-white/80 backdrop-blur-sm rounded-md p-6 ">
      <div className="text-center pb-6">
        <div className="mx-auto w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-600 rounded-full flex items-center justify-center mb-4 shadow-lg">
@@ -159,6 +166,7 @@ const[isLoading,setIsLoading] =useState(false);
   Back to Login
 </Button>
      </div>
+    </div>
     </div>
   )
 }

@@ -25,7 +25,8 @@ function LoginScreen({onSignUp,onSignIn}:LoginScreenProps) {
     onSignIn(mobileNumber)
   }
   return (
-    <div className='w-full border-0 bg-white/80  shadow-2xl p-6 backdrop:blur-sm rounded-md pb-6'>
+    <div className='w-full max-w-md flex justify-center items-center'>
+    <div className='w-full border-0 bg-white/80  shadow-2xl p-6 backdrop:blur-sm rounded-md pb-6 '>
       <div className='text-center pb-6 '>
         <div className='mx-auto bg-gradient-to-r from-blue-500  to-blue-700 w-18 h-18 rounded-full flex items-center justify-center shadow-lg '>
       <Phone className='w-8 h-8 text-white'/>
@@ -68,6 +69,7 @@ Mobile Number
           <p className='text-xs text-gray-500'>By continuing, you agree to our Terms of Service and Privacy Policy</p> 
           </div>
       </div>
+   </div>
    </div>
   )
 }
